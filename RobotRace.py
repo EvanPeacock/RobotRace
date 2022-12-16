@@ -7,11 +7,13 @@ hub = PrimeHub()
 hub.speaker.set_volume(100)
 hub.light_matrix.show_image('CHESSBOARD')
 
-#Initialize the Distance Sensor and motor
+# Initialize the Distance Sensor and motor
 motors = MotorPair('C', 'D')
-col_sensor_A = ColorSensor('A')
-col_sensor_B = ColorSensor('B')
+colorA = ColorSensor('A')
+colorB = ColorSensor('B')
 
+# Set default speed
+current_speed = 25
 
 def matrixSpin():
     hub.light_matrix.off()
@@ -85,42 +87,72 @@ def matrixSlowDownPerm():
     hub.speaker.beep(75, 0.3)
     hub.speaker.beep(60, 0.3)
 
+def secondsToMinutes(seconds):
+    #Convert to minutes and round down
+    minutes = seconds // 60
+
+    #Get remaining seconds
+    remaining_seconds = seconds % 60
+
+    #Format the seconds to have a leading zero
+    formatted_seconds = "{:02d}".format(remaining_seconds)
+
+    #Return formatted string with minutes and seconds
+    return "{}:{}".format(minutes, formatted_seconds)
+
 def randomAction():
+    global current_speed
     num = random.randint(0, 4) # However many different actions we want!
 
     if num == 0:
         #Spin in place
         print("Spin")
         matrixSpin()
-        motors.start(20, -20)
+        motors.start_tank_at_power(-80, 80)
         wait_for_seconds(2)
-        motors.start()
+        # Return to normal speed
+        motors.start(current_speed)
     elif num == 1:
         #Speed up for 2 seconds
         print("Temporary Speed Up")
         matrixSpeedUpTemp()
-        motors.start(30)
+        if current_speed < 85:
+            motors.start(current_speed + 15)
+            print("Temporary Speed: " + str(current_speed + 15))
+        else:
+            motors.start(100)
+            print("Temporary Speed: 100")
         wait_for_seconds(2)
-        motors.start()
+        motors.start(current_speed)
     elif num == 2:
         #Slow down for 2 seconds
         print("Temporary Slow Down")
         matrixSlowDownTemp()
-        motors.start(10)
+        if current_speed > 15:
+            motors.start(current_speed - 15)
+            print("Temporary Speed: " + str(current_speed - 15))
+        else:
+            motors.start(5)
+            print("Temporary Speed: 5")
         wait_for_seconds(2)
-        motors.start()
+        motors.start(current_speed)
     elif num == 3:
         #Speed up permanently
         print("Permanent Speed Up")
         matrixSpeedUpPerm()
-        motors.start(30)
+        current_speed = current_speed + 5
+        motors.start(current_speed)
+        print("New Speed: " + str(current_speed))
     elif num == 4:
         #Slow down permanently
         print("Permanent Slow Down")
         matrixSlowDownPerm()
-        motors.start(10)
+        current_speed = current_speed - 5
+        motors.start(current_speed)
+        print("New Speed: " + str(current_speed))
 
 def race():
+    global current_speed
     #Press the left button to start
     while True:
         if hub.left_button.was_pressed():
@@ -136,28 +168,38 @@ def race():
             print("Timer Started")
             break
 
-    while(col_sensor_A.get_color() != 'red'):
+    while(colorA.get_color() != 'red'):
         #Line following
-        if col_sensor_A.get_color() == 'black':
-            motors.start(20, 15)
-        elif col_sensor_B.get_color() == 'black':
-            motors.start(-15)
+        if colorA.get_color() == 'black':
+            motors.start(15, current_speed)
+        elif colorB.get_color() == 'black':
+            motors.start(-15, current_speed)
         else:
-            motors.start()
+            motors.start(current_speed)
 
         #Powerup detection
-        if col_sensor_A.get_color() == 'green':
+        if colorA.get_color() == 'green':
             print("Powerup Detected")
             randomAction()
             hub.light_matrix.show_image('ARROW_N')
 
     #Stop the robot when the finish line is detected
     motors.stop()
+
+    #Format and print the total time
+    totalTime = secondsToMinutes(timer.now())
+    print("Total Time: " + totalTime)
+
     hub.light_matrix.show_image('CHESSBOARD')
-    print("Total Time: " + str(timer.now()) + " seconds")
     hub.speaker.beep(60, 0.2)
     hub.speaker.beep(65, 0.3)
     hub.speaker.beep(70, 0.2)
     hub.speaker.beep(75, 0.3)
 
+    #Display the total time on the matrix
+    hub.light_matrix.off()
+    while True:
+        hub.light_matrix.write(totalTime)
+
+#Start race
 race()
