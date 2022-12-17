@@ -9,8 +9,11 @@ hub.light_matrix.show_image('CHESSBOARD')
 
 # Initialize the Distance Sensor and motor
 motors = MotorPair('C', 'D')
+motorC = Motor('C')
+motorD = Motor('D')
 colorA = ColorSensor('A')
 colorB = ColorSensor('B')
+
 
 # Set default speed
 current_speed = 25
@@ -108,19 +111,27 @@ def randomAction():
         #Spin in place
         print("Spin")
         matrixSpin()
-        motors.start_tank_at_power(-80, 80)
+        motorC.stop()
+        motorD.start(80)
+        #motors.start_tank_at_power(-80, 80)
         wait_for_seconds(2)
         # Return to normal speed
-        motors.start(current_speed)
+        #motors.start(current_speed)
+        motorC.start(-current_speed)
+        motorD.start(current_speed)
     elif num == 1:
         #Speed up for 2 seconds
         print("Temporary Speed Up")
         matrixSpeedUpTemp()
         if current_speed < 85:
-            motors.start(current_speed + 15)
+            motorC.start(-current_speed-15)
+            motorD.start(current_speed+15)
+            #motors.start(current_speed + 15)
             print("Temporary Speed: " + str(current_speed + 15))
         else:
-            motors.start(100)
+            motorC.start(-100)
+            motorD.start(100)
+            #motors.start(100)
             print("Temporary Speed: 100")
         wait_for_seconds(2)
         motors.start(current_speed)
@@ -129,26 +140,36 @@ def randomAction():
         print("Temporary Slow Down")
         matrixSlowDownTemp()
         if current_speed > 15:
-            motors.start(current_speed - 15)
+            motorC.start(-current_speed+15)
+            motorD.start(current_speed-15)
+            #motors.start(current_speed - 15)
             print("Temporary Speed: " + str(current_speed - 15))
         else:
-            motors.start(5)
+            motorC.start(-5)
+            motorD.start(5)
+            #motors.start(5)
             print("Temporary Speed: 5")
-        wait_for_seconds(2)
-        motors.start(current_speed)
+        wait_for_seconds(1)
+        motorC.start(-current_speed)
+        motorD.start(current_speed)
+        #motors.start(current_speed)
     elif num == 3:
         #Speed up permanently
         print("Permanent Speed Up")
         matrixSpeedUpPerm()
         current_speed = current_speed + 5
-        motors.start(current_speed)
+        motorC.start(-current_speed)
+        motorD.start(current_speed)
+        #motors.start(current_speed)
         print("New Speed: " + str(current_speed))
     elif num == 4:
         #Slow down permanently
         print("Permanent Slow Down")
         matrixSlowDownPerm()
         current_speed = current_speed - 5
-        motors.start(current_speed)
+        motorC.start(-current_speed)
+        motorD.start(current_speed)
+        #motors.start(current_speed)
         print("New Speed: " + str(current_speed))
 
 def race():
@@ -171,18 +192,22 @@ def race():
     while(colorA.get_color() != 'red'):
         #Line following
         if colorA.get_color() == 'black':
-            motors.start(15, current_speed)
+            motorC.start(-current_speed)
+            motorD.start(10)
+            wait_for_seconds(0.5)
         elif colorB.get_color() == 'black':
-            motors.start(-15, current_speed)
+            motorD.start(current_speed)
+            motorC.start(-10)
+            wait_for_seconds(0.5)
         else:
-            motors.start(current_speed)
-
+            motorC.start(-current_speed)
+            motorD.start(current_speed)
         #Powerup detection
         if colorA.get_color() == 'green':
             print("Powerup Detected")
             randomAction()
             hub.light_matrix.show_image('ARROW_N')
-
+        
     #Stop the robot when the finish line is detected
     motors.stop()
 
