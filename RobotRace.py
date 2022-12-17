@@ -136,7 +136,7 @@ def randomAction():
         wait_for_seconds(1)
         motors.start(current_speed)
     elif num == 2:
-        #Slow down for 1 seconds
+        #Slow down for 1 second
         print("Temporary Slow Down")
         matrixSlowDownTemp()
         if current_speed > 15:
