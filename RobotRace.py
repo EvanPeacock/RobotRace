@@ -31,10 +31,10 @@ def matrixSpin():
     hub.light_matrix.set_pixel(4, 3)
     hub.light_matrix.set_pixel(3, 1)
     hub.light_matrix.set_pixel(2, 2)
-    hub.speaker.beep(75, 0.2)
-    hub.speaker.beep(60, 0.2)
-    hub.speaker.beep(75, 0.2)
-    hub.speaker.beep(60, 0.2)
+    hub.speaker.beep(75, 0.1)
+    hub.speaker.beep(60, 0.1)
+    hub.speaker.beep(75, 0.1)
+    hub.speaker.beep(60, 0.1)
 
 def matrixSpeedUpTemp():
     hub.light_matrix.off()
@@ -47,10 +47,10 @@ def matrixSpeedUpTemp():
     hub.light_matrix.set_pixel(1, 4)
     hub.light_matrix.set_pixel(2, 3)
     hub.light_matrix.set_pixel(3, 4)
-    hub.speaker.beep(60, 0.3)
-    hub.speaker.beep(70, 0.3)
-    hub.speaker.beep(80, 0.3)
-    hub.speaker.beep(90, 0.3)
+    hub.speaker.beep(60, 0.1)
+    hub.speaker.beep(70, 0.1)
+    hub.speaker.beep(80, 0.1)
+    hub.speaker.beep(90, 0.1)
 
 def matrixSlowDownTemp():
     hub.light_matrix.off()
@@ -63,10 +63,10 @@ def matrixSlowDownTemp():
     hub.light_matrix.set_pixel(1, 0)
     hub.light_matrix.set_pixel(2, 1)
     hub.light_matrix.set_pixel(3, 0)
-    hub.speaker.beep(90, 0.3)
-    hub.speaker.beep(80, 0.3)
-    hub.speaker.beep(70, 0.3)
-    hub.speaker.beep(60, 0.3)
+    hub.speaker.beep(90, 0.1)
+    hub.speaker.beep(80, 0.1)
+    hub.speaker.beep(70, 0.1)
+    hub.speaker.beep(60, 0.1)
 
 def matrixSpeedUpPerm():
     hub.light_matrix.off()
@@ -75,9 +75,9 @@ def matrixSpeedUpPerm():
     hub.light_matrix.set_pixel(2, 0)
     hub.light_matrix.set_pixel(3, 1)
     hub.light_matrix.set_pixel(4, 2)
-    hub.speaker.beep(60, 0.3)
-    hub.speaker.beep(75, 0.3)
-    hub.speaker.beep(90, 0.3)
+    hub.speaker.beep(60, 0.1)
+    hub.speaker.beep(75, 0.1)
+    hub.speaker.beep(90, 0.1)
 
 def matrixSlowDownPerm():
     hub.light_matrix.off()
@@ -86,9 +86,9 @@ def matrixSlowDownPerm():
     hub.light_matrix.set_pixel(2, 4)
     hub.light_matrix.set_pixel(3, 3)
     hub.light_matrix.set_pixel(4, 2)
-    hub.speaker.beep(90, 0.3)
-    hub.speaker.beep(75, 0.3)
-    hub.speaker.beep(60, 0.3)
+    hub.speaker.beep(90, 0.1)
+    hub.speaker.beep(75, 0.1)
+    hub.speaker.beep(60, 0.1)
 
 def secondsToMinutes(seconds):
     #Convert to minutes and round down
@@ -111,8 +111,8 @@ def randomAction():
         #Spin in place
         print("Spin")
         matrixSpin()
-        motorC.start(80)
-        motorD.start(80)
+        motorC.start(79)
+        motorD.start(79)
         #motors.start_tank_at_power(-80, 80)
         wait_for_seconds(2)
         # Return to normal speed
@@ -217,9 +217,9 @@ def race():
 
     hub.light_matrix.show_image('CHESSBOARD')
     hub.speaker.beep(60, 0.2)
-    hub.speaker.beep(65, 0.3)
+    hub.speaker.beep(65, 0.1)
     hub.speaker.beep(70, 0.2)
-    hub.speaker.beep(75, 0.3)
+    hub.speaker.beep(75, 0.1)
 
     #Display the total time on the matrix
     hub.light_matrix.off()
