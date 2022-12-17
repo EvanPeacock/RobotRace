@@ -105,7 +105,7 @@ def secondsToMinutes(seconds):
 
 def randomAction():
     global current_speed
-    num = random.randint(0, 4) # However many different actions we want!
+    num = random.randint(0, 4)
 
     if num == 0:
         #Spin in place
@@ -113,10 +113,8 @@ def randomAction():
         matrixSpin()
         motorC.start(79)
         motorD.start(79)
-        #motors.start_tank_at_power(-80, 80)
         wait_for_seconds(2)
         # Return to normal speed
-        #motors.start(current_speed)
         motorC.start(-current_speed)
         motorD.start(current_speed)
     elif num == 1:
@@ -126,12 +124,10 @@ def randomAction():
         if current_speed < 85:
             motorC.start(-current_speed-15)
             motorD.start(current_speed+15)
-            #motors.start(current_speed + 15)
             print("Temporary Speed: " + str(current_speed + 15))
         else:
             motorC.start(-100)
             motorD.start(100)
-            #motors.start(100)
             print("Temporary Speed: 100")
         wait_for_seconds(1)
         motors.start(current_speed)
@@ -142,25 +138,20 @@ def randomAction():
         if current_speed > 15:
             motorC.start(-current_speed+15)
             motorD.start(current_speed-15)
-            #motors.start(current_speed - 15)
             print("Temporary Speed: " + str(current_speed - 15))
         else:
             motorC.start(-5)
             motorD.start(5)
-            #motors.start(5)
             print("Temporary Speed: 5")
         wait_for_seconds(1)
         motorC.start(-current_speed)
         motorD.start(current_speed)
-        #motors.start(current_speed)
     elif num == 3:
-        #Speed up permanently
         print("Permanent Speed Up")
         matrixSpeedUpPerm()
         current_speed = current_speed + 5
         motorC.start(-current_speed)
         motorD.start(current_speed)
-        #motors.start(current_speed)
         print("New Speed: " + str(current_speed))
     elif num == 4:
         #Slow down permanently
@@ -169,7 +160,6 @@ def randomAction():
         current_speed = current_speed - 5
         motorC.start(-current_speed)
         motorD.start(current_speed)
-        #motors.start(current_speed)
         print("New Speed: " + str(current_speed))
 
 def race():
@@ -189,7 +179,7 @@ def race():
             print("Timer Started")
             break
 
-    while(colorA.get_color() != 'red'):
+    while(colorA.get_color() != 'red' and colorB.get_color() != 'red'):
         #Line following
         if colorA.get_color() == 'black':
             motorC.start(-current_speed)
@@ -203,7 +193,7 @@ def race():
             motorC.start(-current_speed)
             motorD.start(current_speed)
         #Powerup detection
-        if colorA.get_color() == 'green':
+        if colorA.get_color() == 'green' or colorB.get_color() == 'green':
             print("Powerup Detected")
             randomAction()
             hub.light_matrix.show_image('ARROW_N')
