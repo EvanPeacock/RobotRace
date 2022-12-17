@@ -111,7 +111,7 @@ def randomAction():
         #Spin in place
         print("Spin")
         matrixSpin()
-        motorC.stop()
+        motorC.start(80)
         motorD.start(80)
         #motors.start_tank_at_power(-80, 80)
         wait_for_seconds(2)
